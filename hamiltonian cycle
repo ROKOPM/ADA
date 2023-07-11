@@ -1,0 +1,34 @@
+def CicloHamiltoniano(grafo):
+    camino = []
+    
+    if len(grafo) >= 2:
+        camino.append(list(grafo.keys())[0])  # Agregar el primer nodo del grafo al camino
+        RecorrerNodos(grafo, camino, list(grafo.keys())[0])
+    
+    print("No se encontró ningún ciclo hamiltoniano")
+
+
+def RecorrerNodos(grafo, camino, nodoActual):
+    if set(grafo.keys()) == set(camino) and grafo[nodoActual][0] in grafo[nodoActual]:
+        print("Ciclo hamiltoniano encontrado:", camino)
+        return
+    
+    for nodoAdyacente in grafo[nodoActual]:
+        if nodoAdyacente not in camino:
+            camino.append(nodoAdyacente)
+            RecorrerNodos(grafo, camino, nodoAdyacente)
+            camino.remove(nodoAdyacente)
+
+
+# Ejemplo de uso
+grafo = {
+    'A': ['B', 'C', 'D'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D'],
+    'D': ['A', 'B', 'C', 'E'],
+    'E': ['D']
+}
+
+
+
+CicloHamiltoniano(grafo)
