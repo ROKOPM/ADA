@@ -1,0 +1,215 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Prototipos de funciones
+void llenarArreglo(int *arreglo, int n);
+void mostrarArreglo(int *arreglo, int n);
+void bubbleSort(int *arreglo, int n);
+void insertionSort(int *arreglo, int n);
+void selectionSort(int *arreglo, int n);
+void mergeSort(int *arreglo, int inicio, int fin);
+void merge(int *arreglo, int inicio, int medio, int fin);
+double calcularTiempo(clock_t inicio, clock_t fin);
+
+int main()
+{
+    int opcion, n, *arreglo;
+    clock_t inicio, fin;
+    double tiempo;
+
+    printf("Ingrese el tamaño del arreglo: ");
+    scanf("%d", &n);
+
+    arreglo = (int *)malloc(n * sizeof(int));
+
+    llenarArreglo(arreglo, n);
+    /*
+    printf("Arreglo desordenado:\n");
+    mostrarArreglo(arreglo, n);
+*/
+    do {
+        printf("\nSeleccione el tipo de ordenamiento:\n");
+        printf("1. Bubble Sort\n");
+        printf("2. Insertion Sort\n");
+        printf("3. Selection Sort\n");
+        printf("4. Merge Sort\n");
+        printf("5. Salir\n");
+        scanf("%d", &opcion);
+
+        switch (opcion) {
+            case 1:
+                inicio = clock();
+                bubbleSort(arreglo, n);
+                fin = clock();
+                tiempo = calcularTiempo(inicio, fin);
+                //printf("Arreglo ordenado con Bubble Sort:\n");
+                //mostrarArreglo(arreglo, n);
+                printf("Tiempo de ejecucion: %lf segundos\n", tiempo);
+                break;
+
+            case 2:
+                inicio = clock();
+                insertionSort(arreglo, n);
+                fin = clock();
+                tiempo = calcularTiempo(inicio, fin);
+                //printf("Arreglo ordenado con Insertion Sort:\n");
+                //mostrarArreglo(arreglo, n);
+                printf("Tiempo de ejecucion: %lf segundos\n", tiempo);
+                break;
+
+            case 3:
+                inicio = clock();
+                selectionSort(arreglo, n);
+                fin = clock();
+                tiempo = calcularTiempo(inicio, fin);
+                //printf("Arreglo ordenado con Selection Sort:\n");
+                //mostrarArreglo(arreglo, n);
+                printf("Tiempo de ejecucion: %lf segundos\n", tiempo);
+                break;
+
+            case 4:
+                inicio = clock();
+                mergeSort(arreglo, 0, n - 1);
+                fin = clock();
+                tiempo = calcularTiempo(inicio, fin);
+                //printf("Arreglo ordenado con Merge Sort:\n");
+                //mostrarArreglo(arreglo, n);
+                printf("Tiempo de ejecucion: %lf segundos\n", tiempo);
+                break;
+
+            case 5:
+                printf("Saliendo...\n");
+                break;
+
+            default:
+                printf("Opcion no valida.\n");
+                break;
+        }
+    } while (opcion != 5);
+
+    free(arreglo);
+
+    return 0;
+}
+
+void llenarArreglo(int *arreglo, int n)
+{
+    srand(time(NULL));
+    for (int i = 0; i < n; i++) {
+        arreglo[i] = rand() % 99 + 1;
+    }
+}
+
+void mostrarArreglo(int *arreglo, int n)
+{
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arreglo[i]);
+    }
+    printf("\n");
+}
+
+void bubbleSort(int arr[], int n) {
+    int i, j;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void insertionSort(int arr[], int n) {
+    int i, j, temp;
+    for (i = 1; i < n; i++) {
+        temp = arr[i];
+        j = i - 1;
+        while (j >= 0 && arr[j] > temp) {
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j+1] = temp;
+    }
+}
+
+void merge(int arr[], int l, int m, int r)
+{
+    int i, j, k;  //se declaran las variables y las variables auxiliares 
+    int n1 = m - l + 1;
+    int n2 = r - m;
+                    //se declaran los arreglos auxiliares 
+    int L[n1], R[n2];
+    //funcionamiento de los arreglos auxiliares left y right
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+ 
+    i = 0;
+    j = 0;
+    k = l;
+ 
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+  //con ayuda de estos while es como se "mueven" los arreglos 
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+ 
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+ 
+void mergeSort(int arr[], int l, int r) {
+if (l < r) {
+int m = l + (r - l) / 2;
+mergeSort(arr, l, m);
+mergeSort(arr, m + 1, r);
+merge(arr, l, m, r);
+}
+}
+
+// Función para intercambiar dos elementos en un arreglo
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Algoritmo de ordenamiento por selección
+void selectionSort(int arr[], int n) {
+int i, j, min_idx;
+for (i = 0; i < n - 1; i++) {
+min_idx = i;
+for (j = i + 1; j < n; j++) {
+if (arr[j] < arr[min_idx]) {
+min_idx = j;
+}
+}
+int temp = arr[i];
+arr[i] = arr[min_idx];
+arr[min_idx] = temp;
+}
+}
+
+double calcularTiempo(clock_t inicio, clock_t fin)
+{
+    return ((double)(fin - inicio)) / CLOCKS_PER_SEC;
+}

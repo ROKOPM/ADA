@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Función para sumar dos matrices
+void sumar_matrices(int filas, int columnas, int matriz1[filas][columnas], int matriz2[filas][columnas], int resultado[filas][columnas]) {
+    int i, j;
+    for (i = 0; i < filas; i++) {
+        for (j = 0; j < columnas; j++) {
+            resultado[i][j] = matriz1[i][j] + matriz2[i][j];
+        }
+    }
+}
+
+int main() {
+    int filas, columnas, i, j;
+    printf("Ingrese el número de filas de las matrices: ");
+    scanf("%d", &filas);
+    printf("Ingrese el número de columnas de las matrices: ");
+    scanf("%d", &columnas);
+
+    // Crear las matrices
+    int matriz1[filas][columnas], matriz2[filas][columnas], resultado[filas][columnas];
+
+
+    // Llenar las matrices con números enteros aleatorios entre 1 y 99
+    srand(time(NULL)); // Inicializar el generador de números aleatorios
+    for (i = 0; i < filas; i++) {
+        for (j = 0; j < columnas; j++) {
+            matriz1[i][j] = rand() % 99 + 1;
+            matriz2[i][j] = rand() % 99 + 1;
+        }
+    }
+
+    // Mostrar las matrices a sumar
+    printf("Matriz 1:\n");
+    for (i = 0; i < filas; i++) {
+        for (j = 0; j < columnas; j++) {
+            printf("%d ", matriz1[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("Matriz 2:\n");
+    for (i = 0; i < filas; i++) {
+        for (j = 0; j < columnas; j++) {
+            printf("%d ", matriz2[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Llamar a la función para sumar las matrices y calcular el tiempo de ejecución
+    clock_t inicio, fin;
+    double tiempo;
+    inicio = clock();
+    sumar_matrices(filas, columnas, matriz1, matriz2, resultado);
+    fin = clock();
+    tiempo = ((double) (fin - inicio)) / CLOCKS_PER_SEC;
+
+    // Mostrar la matriz de resultado y el tiempo de ejecución
+    printf("Matriz resultado:\n");
+    for (i = 0; i < filas; i++) {
+        for (j = 0; j < columnas; j++) {
+            printf("%d ", resultado[i][j]);
+        }
+        printf("\n");
+    }
+    printf("Tiempo de ejecución: %f segundos\n", tiempo);
+
+    return 0;
+}

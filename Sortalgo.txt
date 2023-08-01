@@ -1,0 +1,56 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Función para ordenar un arreglo de enteros con el algoritmo de ordenamiento por inserción
+void insertion_sort(int arr[], int n) {
+    int i, j, temp;
+    for (i = 1; i < n; i++) {
+        temp = arr[i];
+        j = i - 1;
+        while (j >= 0 && arr[j] > temp) {
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j+1] = temp;
+    }
+}
+
+int main() {
+    int n, i;
+    printf("Ingrese la cantidad de valores a ordenar: ");
+    scanf("%d", &n);
+
+    // Crear el arreglo de datos a ordenar
+    int arr[n];
+
+    // Llenar el arreglo con números enteros aleatorios entre -99 y 99
+    srand(time(NULL)); // Inicializar el generador de números aleatorios
+    for (i = 0; i < n; i++) {
+        arr[i] = rand() % 199 - 99;
+    }
+
+    // Mostrar los datos desordenados
+    printf("Datos desordenados:\n");
+    for (i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Ordenar los datos de entrada con el algoritmo de ordenamiento por inserción y calcular el tiempo de ejecución
+    clock_t inicio, fin;
+    inicio = clock(); // Registrar el tiempo de inicio de la ejecución
+    insertion_sort(arr, n);
+    fin = clock(); // Registrar el tiempo de fin de la ejecución
+    double tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
+
+    // Mostrar los datos ordenados y el tiempo de ejecución
+    printf("Datos ordenados:\n");
+    for (i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\nTiempo de ejecución: %.4lf segundos\n", tiempo);
+
+    return 0;
+}
